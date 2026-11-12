@@ -164,3 +164,4 @@ export const BudgetProgress: React.FC<BudgetProgressProps> = ({
     </>
   );
 };
+

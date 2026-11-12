@@ -72,3 +72,4 @@ export const INITIAL_STUDENT_TRANSACTIONS: Transaction[] = [
     receipt: null,
   },
 ];
+

@@ -189,3 +189,4 @@ The project includes **37 automated tests** across 6 comprehensive test suites:
 
 ## 📄 License
 This project is licensed under the MIT License.
+

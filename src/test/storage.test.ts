@@ -94,3 +94,4 @@ describe('StorageService', () => {
     expect(storageService.getTransactions().length).toBeGreaterThan(0);
   });
 });
+

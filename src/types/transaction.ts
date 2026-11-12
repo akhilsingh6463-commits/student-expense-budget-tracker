@@ -57,3 +57,4 @@ export interface FinancialSummaryData {
   incomeCount: number;
   expenseCount: number;
 }
+

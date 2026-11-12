@@ -40,3 +40,4 @@ export const useBudget = (currentTotalExpenses: number = 0) => {
     isNearBudget,
   };
 };
+

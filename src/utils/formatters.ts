@@ -71,3 +71,4 @@ export const CATEGORY_COLORS: Record<Category, { bg: string; text: string; dot: 
   Healthcare: { bg: 'bg-red-50', text: 'text-red-700', dot: '#ef4444' },
   Other: { bg: 'bg-slate-100', text: 'text-slate-700', dot: '#64748b' },
 };
+

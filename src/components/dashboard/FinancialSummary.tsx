@@ -138,3 +138,4 @@ export const FinancialSummary: React.FC<FinancialSummaryProps> = ({
     </section>
   );
 };
+
