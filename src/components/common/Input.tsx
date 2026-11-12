@@ -17,26 +17,26 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5"
+            className="block text-xs font-medium text-slate-700 mb-1"
           >
             {label}
           </label>
         )}
-        <div className="relative rounded-xl shadow-sm">
+        <div className="relative rounded-lg">
           {leftIcon && (
-            <div className="pointer-events-none absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+            <div className="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
               {leftIcon}
             </div>
           )}
           <input
             ref={ref}
             id={inputId}
-            className={`block w-full rounded-xl border text-slate-900 placeholder:text-slate-400 text-sm py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0 ${
-              leftIcon ? 'pl-10' : 'pl-3.5'
-            } ${rightIcon ? 'pr-10' : 'pr-3.5'} ${
+            className={`block w-full rounded-lg border text-slate-900 placeholder:text-slate-400 text-xs sm:text-sm py-2 transition-colors focus:outline-none focus:ring-1 ${
+              leftIcon ? 'pl-9' : 'pl-3'
+            } ${rightIcon ? 'pr-9' : 'pr-3'} ${
               error
                 ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-200 bg-rose-50/20'
-                : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-100 bg-white'
+                : 'border-slate-200 focus:border-slate-400 focus:ring-slate-200 bg-white'
             } ${className}`}
             {...props}
           />

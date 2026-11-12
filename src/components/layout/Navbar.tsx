@@ -1,13 +1,12 @@
 import React, { useRef } from 'react';
 import {
-  GraduationCap,
+  Wallet,
   Upload,
   RefreshCw,
   Trash2,
   FileSpreadsheet,
   FileCode,
 } from 'lucide-react';
-import { Button } from '../common/Button';
 
 interface NavbarProps {
   currency: string;
@@ -36,9 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       const reader = new FileReader();
       reader.onload = (event) => {
         const text = event.target?.result as string;
-        if (text) {
-          onImportJson(text);
-        }
+        if (text) onImportJson(text);
       };
       reader.readAsText(file);
     }
@@ -46,38 +43,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const currencies = [
-    { code: 'USD', symbol: '$', label: 'USD ($)' },
-    { code: 'EUR', symbol: '€', label: 'EUR (€)' },
-    { code: 'GBP', symbol: '£', label: 'GBP (£)' },
-    { code: 'INR', symbol: '₹', label: 'INR (₹)' },
-    { code: 'CAD', symbol: 'C$', label: 'CAD ($)' },
+    { code: 'USD', label: 'USD ($)' },
+    { code: 'EUR', label: 'EUR (€)' },
+    { code: 'GBP', label: 'GBP (£)' },
+    { code: 'INR', label: 'INR (₹)' },
+    { code: 'CAD', label: 'CAD ($)' },
   ];
 
   return (
-    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand & App Title */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center shadow-md shadow-indigo-200 flex-shrink-0">
-            <GraduationCap className="w-5 h-5" />
+    <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200/70">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        {/* Brand */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center">
+            <Wallet className="w-4 h-4" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-none">
-                CampusBudget
-              </h1>
-              <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
-                Student Edition
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 hidden sm:block mt-0.5">
-              Student Expense & Budget Tracker
-            </p>
-          </div>
+          <span className="text-sm font-semibold text-slate-900 tracking-tight">
+            CampusBudget
+          </span>
         </div>
 
-        {/* Header Right Actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        {/* Right Actions */}
+        <div className="flex items-center gap-2">
           {/* Currency Switcher */}
           <div className="flex items-center">
             <label htmlFor="currency-select" className="sr-only">
@@ -87,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="currency-select"
               value={currency}
               onChange={(e) => onCurrencyChange(e.target.value)}
-              className="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 cursor-pointer"
+              className="bg-slate-100 hover:bg-slate-200/80 transition-colors border-0 text-slate-700 text-xs font-medium rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400 cursor-pointer"
             >
               {currencies.map((c) => (
                 <option key={c.code} value={c.code}>
@@ -97,72 +84,60 @@ export const Navbar: React.FC<NavbarProps> = ({
             </select>
           </div>
 
-          {/* Export Dropdown / Buttons */}
-          <div className="hidden md:flex items-center gap-1.5">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onExportCsv}
-              icon={<FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />}
-              title="Export to CSV"
-            >
-              CSV
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onExportJson}
-              icon={<FileCode className="w-3.5 h-3.5 text-indigo-600" />}
-              title="Backup JSON"
-            >
-              JSON
-            </Button>
-          </div>
+          <div className="h-4 w-px bg-slate-200 mx-1" />
 
-          {/* Import JSON button */}
-          <div className="relative">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json"
-              className="hidden"
-              onChange={handleFileUpload}
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => fileInputRef.current?.click()}
-              icon={<Upload className="w-3.5 h-3.5" />}
-              title="Import JSON Backup"
-              className="hidden sm:inline-flex"
-            >
-              Import
-            </Button>
-          </div>
+          {/* Export / Import */}
+          <button
+            onClick={onExportCsv}
+            title="Export CSV"
+            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+          </button>
+          <button
+            onClick={onExportJson}
+            title="Backup JSON"
+            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+          >
+            <FileCode className="w-4 h-4" />
+          </button>
 
-          {/* Reset / Sample Data */}
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onResetToSample}
-              icon={<RefreshCw className="w-3.5 h-3.5" />}
-              title="Reset to sample student data"
-              className="text-slate-600 hover:text-indigo-600 p-2"
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (window.confirm('Are you sure you want to clear all transactions?')) {
-                  onClearAll();
-                }
-              }}
-              icon={<Trash2 className="w-3.5 h-3.5 text-rose-500" />}
-              title="Clear all transactions"
-              className="text-slate-600 hover:text-rose-600 p-2"
-            />
-          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={handleFileUpload}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            title="Import JSON"
+            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+          >
+            <Upload className="w-4 h-4" />
+          </button>
+
+          <div className="h-4 w-px bg-slate-200 mx-1" />
+
+          {/* Reset / Clear */}
+          <button
+            onClick={onResetToSample}
+            title="Reset sample data"
+            className="p-1.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => {
+              if (window.confirm('Clear all transactions?')) {
+                onClearAll();
+              }
+            }}
+            title="Clear all"
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </header>

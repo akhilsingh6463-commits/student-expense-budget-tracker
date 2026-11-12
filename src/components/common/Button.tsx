@@ -20,27 +20,27 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none';
+    'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-offset-1 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none';
 
   const variantStyles = {
     primary:
-      'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm shadow-indigo-200 focus:ring-indigo-500',
+      'bg-slate-900 hover:bg-slate-800 text-white shadow-xs focus:ring-slate-900',
     secondary:
       'bg-slate-100 hover:bg-slate-200 text-slate-700 focus:ring-slate-400',
     outline:
-      'border border-slate-300 hover:bg-slate-50 text-slate-700 focus:ring-indigo-500',
+      'border border-slate-200 hover:bg-slate-50 text-slate-700 focus:ring-slate-300',
     danger:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-sm shadow-rose-200 focus:ring-rose-500',
+      'bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus:ring-rose-500',
     ghost:
       'bg-transparent hover:bg-slate-100 text-slate-600 hover:text-slate-900 focus:ring-slate-400',
     success:
-      'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm shadow-emerald-200 focus:ring-emerald-500',
+      'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs focus:ring-emerald-500',
   };
 
   const sizeStyles = {
-    sm: 'text-xs px-3 py-1.5 gap-1.5',
-    md: 'text-sm px-4 py-2 gap-2',
-    lg: 'text-base px-5 py-2.5 gap-2.5',
+    sm: 'text-xs px-2.5 py-1.5 gap-1.5',
+    md: 'text-xs sm:text-sm px-3.5 py-2 gap-2',
+    lg: 'text-sm sm:text-base px-4 py-2.5 gap-2',
   };
 
   return (

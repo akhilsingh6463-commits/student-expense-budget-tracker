@@ -1,7 +1,5 @@
 import React, { useState, useRef } from 'react';
 import {
-  Sparkles,
-  TrendingUp,
   CheckCircle,
   AlertCircle,
 } from 'lucide-react';
@@ -56,8 +54,8 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-      {/* Navigation Bar */}
+    <div className="min-h-screen flex flex-col bg-slate-50/60 text-slate-800">
+      {/* Navigation */}
       <Navbar
         currency={budgetConfig.currency}
         onCurrencyChange={(curr) => updateBudgetConfig({ currency: curr })}
@@ -68,12 +66,12 @@ export const App: React.FC = () => {
         onClearAll={clearAll}
       />
 
-      {/* Floating Feedback Toast Notification */}
+      {/* Toast Notification */}
       {feedback && (
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-xl border animate-in slide-in-from-bottom-4 duration-200 text-xs font-semibold backdrop-blur-md"
+          className="fixed bottom-5 right-5 z-50 flex items-center gap-2 px-3.5 py-2.5 rounded-xl shadow-lg border text-xs font-medium backdrop-blur-md animate-in fade-in"
           style={{
             backgroundColor: feedback.type === 'success' ? '#f0fdf4' : '#fef2f2',
             color: feedback.type === 'success' ? '#166534' : '#991b1b',
@@ -89,44 +87,30 @@ export const App: React.FC = () => {
         </div>
       )}
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Welcome Hero / Header */}
-        <section className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2">
+      {/* Main Content */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+        {/* Minimal Header */}
+        <section className="flex items-center justify-between pb-1">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
-                <Sparkles className="w-3 h-3 text-indigo-600" />
-                Student Budgeting Hub
-              </span>
-              <span className="text-xs text-slate-400">Current Semester</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Expense & Budget Dashboard
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Monitor allowances, track university expenses, and maintain balanced finances.
+            <p className="text-xs text-slate-400 mt-0.5">
+              Campus finances, expenses, and budget tracking
             </p>
           </div>
-
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-slate-200/90 shadow-xs">
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-medium text-slate-600">
-                {transactions.length} Total Transactions
-              </span>
-            </div>
-          </div>
+          <span className="text-xs text-slate-400 font-medium">
+            {transactions.length} records
+          </span>
         </section>
 
-        {/* Real-time Financial Summary Cards */}
+        {/* Financial Summary Cards */}
         <FinancialSummary summary={summary} currency={budgetConfig.currency} />
 
-        {/* Dashboard Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Form & Budget Gauges (5 cols on lg) */}
-          <div ref={formSectionRef} className="lg:col-span-5 space-y-6">
-            {/* Transaction Entry Form */}
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left Column: Form & Budget (5 cols) */}
+          <div ref={formSectionRef} className="lg:col-span-5 space-y-4">
             <TransactionForm
               onAddTransaction={addTransaction}
               onUpdateTransaction={updateTransaction}
@@ -135,35 +119,20 @@ export const App: React.FC = () => {
               currency={budgetConfig.currency}
             />
 
-            {/* Monthly Budget Cap Progress */}
             <BudgetProgress
               budgetConfig={budgetConfig}
               totalExpenses={summary.totalExpenses}
               onUpdateBudget={updateBudgetConfig}
             />
 
-            {/* Spending Category Distribution */}
             <CategoryBreakdown
               categories={categoryExpenses}
               currency={budgetConfig.currency}
             />
           </div>
 
-          {/* Right Column: Filters and Transaction List (7 cols on lg) */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-indigo-600" />
-                  Transaction History
-                </h2>
-                <p className="text-xs text-slate-500">
-                  Filter, sort, search, and manage individual records
-                </p>
-              </div>
-            </div>
-
-            {/* Filter Bar */}
+          {/* Right Column: Filters and Transaction List (7 cols) */}
+          <div className="lg:col-span-7 space-y-3">
             <TransactionFilters
               filters={filters}
               onFilterChange={(newFilters) => setFilters((prev) => ({ ...prev, ...newFilters }))}
@@ -172,7 +141,6 @@ export const App: React.FC = () => {
               filteredCount={filteredTransactions.length}
             />
 
-            {/* Transaction Item List */}
             <TransactionList
               transactions={filteredTransactions}
               totalTransactionsCount={transactions.length}
@@ -187,11 +155,9 @@ export const App: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
 };
 
 export default App;
-
