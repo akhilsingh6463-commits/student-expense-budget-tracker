@@ -49,12 +49,13 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
         </div>
 
         {/* Type Filter Pills */}
-        <div className="inline-flex items-center p-1 bg-slate-100 rounded-xl">
+        <div className="inline-flex items-center p-1 bg-slate-100 rounded-xl" data-testid="type-filter-pills">
           {(['All', 'Expense', 'Income'] as const).map((typeOpt) => {
             const isActive = filters.type === typeOpt;
             return (
               <button
                 key={typeOpt}
+                data-testid={`filter-type-${typeOpt.toLowerCase()}`}
                 onClick={() => onFilterChange({ type: typeOpt as 'All' | TransactionType })}
                 className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                   isActive
@@ -119,7 +120,7 @@ export const TransactionFilters: React.FC<TransactionFiltersProps> = ({
 
         {/* Counter and Reset */}
         <div className="flex items-center gap-2 text-slate-500">
-          <span>
+          <span data-testid="filter-counter">
             Showing <strong className="text-slate-800">{filteredCount}</strong> of {totalCount}
           </span>
           {hasActiveFilters && (
