@@ -1,59 +1,57 @@
 # AI Prompt Log (`AI_LOG.md`)
 
-This document records the prompts, challenges, and structural modifications made while using AI coding assistants during the development of the **Student Expense & Budget Tracker Dashboard**.
+This log documents the actual prompts, issues faced, and adjustments made while using AI assistants to build this **Student Expense & Budget Tracker Dashboard** for the take-home assessment.
 
 ---
 
-## 1. Key Prompts Used
+## 1. Prompts Used During Development
 
-### Prompt 1: Project Architecture & Clean Folder Setup
-> *"I'm building a Student Expense & Budget Tracker take-home project using React 18, Vite, TypeScript, and Tailwind CSS. The assignment asks for strict layer separation where persistence (localStorage) is kept isolated in `src/services/` and never called directly in UI components. Can you suggest a clean modular folder structure and how to structure the storage service and custom hooks?"*
+### Prompt 1: Initial Setup & Folder Architecture
+> *"hey bro, I have this react take-home assignment for an interview to build a student expense & budget tracker dashboard. I want to build it using react, vite, typescript, and tailwind. The assignment specifically says persistence logic like localStorage must be kept completely separate inside `src/services/` and not called directly inside components, plus components must be modular and not a monolithic App.jsx. Can you help me scaffold the project and set up a clean folder structure with services, utils, hooks, and components?"*
 
-- **Why I asked this:** I wanted to make sure the foundation was right from minute one, with proper repository patterns so UI components only deal with props and hooks, without mixing storage side-effects.
+- **Context / Why:** Wanted to get the architecture right from the start so that state persistence is strictly isolated in `services/storage.ts` and the UI stays modular as required by the checklist.
 
-### Prompt 2: Calculations & Edge Cases
-> *"Write pure TypeScript functions for financial calculations: total income, total expenses, net balance (income - expenses), savings rate %, and category breakdown. Make sure they handle edge cases like zero income, empty transaction arrays, division by zero, and negative balances properly."*
+### Prompt 2: Core Financial Logic & Edge Cases
+> *"bro now write pure typescript functions for the calculations: total income, total expenses, net balance (income minus expenses), savings rate, and category totals. Make sure it handles edge cases properly, like when there are no transactions yet, or when expenses are higher than income (negative balance), and don't let it crash with divide-by-zero errors."*
 
-- **Why I asked this:** Calculations need to be 100% pure and deterministic so they can be unit-tested cleanly with Vitest without mocking DOM or storage state.
+- **Context / Why:** Needed all financial math in pure helper functions in `src/utils/calculations.ts` so they are deterministic and easy to unit test with Vitest.
 
-### Prompt 3: Handling File/Receipt Uploads without Crashing LocalStorage
-> *"I need to let students attach receipts (PNG, JPG, PDF) to transactions. Since I'm storing everything in localStorage, high-res photos will exceed the 5MB quota very quickly. How can I compress images on an HTML5 canvas before converting to base64, while keeping PDFs as readable data URLs?"*
+### Prompt 3: Handling Receipt Uploads Without Breaking LocalStorage
+> *"bro I also need to let students attach receipts/invoices (png, jpg, pdf) to their transactions. But if someone takes a photo with their phone it can be 3MB to 5MB, and localStorage has a 5MB limit so it will crash with quota exceeded error. Can we compress the images on a canvas first before converting to base64 data URL so it doesn't blow up localStorage?"*
 
-- **Why I asked this:** Real-world receipts taken with mobile phones are 3-5MB each. Compressing them down before saving to localStorage keeps the app fast and prevents quota errors.
+- **Context / Why:** High-res receipt photos would instantly exhaust browser storage without client-side image compression.
 
-### Prompt 4: Writing Vitest & React Testing Library Tests
-> *"Help me write comprehensive Vitest tests for the calculation utilities, validators, storage service, financial summary cards, transaction entry form validation errors, and list deletion with confirmation modals."*
+### Prompt 4: Writing Tests with Vitest & React Testing Library
+> *"make proper test cases and all using vitest and react-testing-library. Test the calculations, form validations (empty description, negative or zero amounts), storage service, summary cards, and test that deleting an item updates the balance immediately."*
 
-- **Why I asked this:** To verify all functional criteria and ensure edge cases (empty states, negative amounts, invalid categories) were thoroughly tested.
+- **Context / Why:** The assignment emphasized test coverage and graceful edge state handling, so we needed comprehensive unit and integration tests.
 
----
+### Prompt 5: Making the UI Minimal & Clean
+> *"make the design a little minimal and all please, there is too much text and helper sentences on the screen. Make it clean and good looking with subtle borders, concise labels, and nice typography so it looks modern and not cluttered."*
 
-## 2. Challenges & Bugs Resolved with AI Assistance
-
-### 1. Canvas Compression for LocalStorage Receipts
-- **Problem:** Adding 2-3 uncompressed camera photos of receipts immediately hit the browser's `QuotaExceededError` limit in localStorage.
-- **How I fixed it with AI:** Wrote an image resizing and compression utility inside `src/services/fileStorage.ts` that draws images to an offscreen `<canvas>` at a max dimension of 1200px and 0.8 quality before converting to base64. This dropped average receipt size from ~3.5MB to under 150KB while keeping text legible.
-
-### 2. Multi-Span String Matcher Failure in Tests
-- **Problem:** During test runs in `TransactionList.test.tsx`, testing for `-$12.50` failed. The negative sign and dollar amount were rendered in separate sibling `<span>` tags for styling, which broke `@testing-library/react`'s `getByText`.
-- **How I fixed it with AI:** Merged the sign and formatted amount into a single string expression (`{isIncome ? `+${formatted}` : `-${formatted}`}`), which fixed the test and improved screen reader accessibility.
-
-### 3. Reactive Balance Updates on Delete & Edit
-- **Problem:** When a transaction was deleted or edited, summary cards and category distribution charts needed to update instantaneously without stale state or extra re-renders.
-- **How I fixed it with AI:** Kept transactions as the single source of truth in `useTransactions`, deriving `summary`, `categoryExpenses`, and `filteredTransactions` via `useMemo` so all metrics update immediately upon state mutation.
+- **Context / Why:** The initial layout had too many explanatory paragraphs. Stripped away all redundant text so the dashboard feels crisp, modern, and easy to use.
 
 ---
 
-## 3. Structural Modifications & Decisions I Made
+## 2. Real Issues & Bugs Fixed Along the Way
 
-1. **Splitting Monolithic Components into Atoms:**  
-   The initial AI suggestion lumped the form inputs, dropzone, filter controls, and table into just two massive files. I broke these down into modular, single-responsibility components in `src/components/common/`, `src/components/dashboard/`, and `src/components/transactions/`.
+1. **LocalStorage Quota Crash with Camera Receipts:**
+   - **Issue:** When testing receipt uploads with high-res phone pictures, browser localStorage immediately threw `QuotaExceededError`.
+   - **Fix:** Implemented an offscreen canvas resize in `src/services/fileStorage.ts` that scales images down to max 1200px and 80% quality. This shrunk receipt payloads by over 80% while keeping receipts sharp and readable.
 
-2. **Customizing Categories for Campus Life:**  
-   Standard templates had generic adult finance categories like "Mortgage" or "Car Loan". I updated them specifically for student needs: `Books & Supplies`, `Campus Dining`, `Dorm Rent`, `Education & Tuition`, `Student Utilities`, `Transportation`, and `Stipends/Salary`.
+2. **Test Failing on `-$12.50` String Match:**
+   - **Issue:** In `TransactionList.test.tsx`, testing for `-$12.50` failed because the minus sign `-` and the `$12.50` were rendered inside two separate `<span>` tags for icon styling, so React Testing Library couldn't find the combined text.
+   - **Fix:** Combined them into a single string expression (`{isIncome ? `+${amount}` : `-${amount}`}`) which fixed the test and made it cleaner for screen readers.
 
-3. **Adding a Monthly Student Budget Cap:**  
-   To make it a true budget tracker rather than just a log, I added a configurable monthly budget cap with visual progress status (**On Track**, **Near Cap**, **Over Budget**).
+3. **Multiple Button Match in Integration Test:**
+   - **Issue:** The integration test threw an error finding multiple buttons named "Income" because both the form type toggle and the filter pill shared the same button text.
+   - **Fix:** Added dedicated `data-testid` attributes (`filter-type-income`, `filter-type-all`, etc.) so the test queries the exact element without ambiguity.
 
-4. **Code Polish & Zero Clutter:**  
-   Removed all auto-generated boilerplate comments, unused imports, and enabled strict TypeScript compiler settings with zero warnings.
+---
+
+## 3. Changes & Customizations Made by Me
+
+- **Decomposed Large Components:** Rather than having large files with form + table + filters together, I broke everything down into single-responsibility components in `src/components/common/`, `dashboard/`, `transactions/`, and `layout/`.
+- **Realistic Student Categories:** Replaced generic budget categories with actual college student needs: `Books & Supplies`, `Campus Dining`, `Dorm Rent`, `Education / Tuition`, `Student Utilities`, `Transportation`, and `Salary / Stipends`.
+- **Added Student Monthly Budget Cap:** Added a monthly budget progress bar with status pills (**On Track**, **Near Cap**, **Over Budget**) and quick budget limit editing.
+- **Removed AI Boilerplate & Comments:** Cleaned out all auto-generated code comments, unused variables, and enforced strict TypeScript compiler settings with zero warnings.
